@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Header with Back Button -->
+    <header class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 fw-bold mb-0 text-primary">Edit Task</h1>
+        <a href="{% url 'logbook' %}" class="btn btn-outline-secondary d-flex align-items-center rounded-pill">
+            <i class="bi bi-arrow-left-circle me-2"></i>
+            Back to Logbook
+        </a>
+    </header>
+    
+    <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-body p-4">
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.media }} {# Essential for Django Autocomplete Light #}
+                
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label for="{{ form.job_id.id_for_label }}" class="form-label fw-bold">Job ID</label>
+                        {{ form.job_id }}
+                    </div>
+                    <div class="col-md-6">
+                        <label for="{{ form.date_issue_reported.id_for_label }}" class="form-label fw-bold">Date Issue Reported</label>
+                        {{ form.date_issue_reported }}
+                    </div>
+                </div>
+
+                <div class="row g-3 mt-3">
+                    <div class="col-md-6">
+                        <label for="{{ form.property.id_for_label }}" class="form-label fw-bold">Property</label>
+                        {{ form.property }}
+                    </div>
+                    <div class="col-md-6">
+                        <label for="{{ form.tenant.id_for_label }}" class="form-label fw-bold">Tenant</label>
+                        {{ form.tenant }}
+                    </div>
+                </div>
+
+                <div class="mt-3">
+                    <label for="{{ form.description_of_issue.id_for_label }}" class="form-label fw-bold">Description of Issue</label>
+                    {{ form.description_of_issue }}
+                </div>
+
+                <div class="row g-3 mt-3">
+                    <div class="col-md-6">
+                        <label for="{{ form.job_allocated.id_for_label }}" class="form-label fw-bold">Job Allocated</label>
+                        {{ form.job_allocated }}
+                    </div>
+                    <div class="col-md-6">
+                        <label for="{{ form.date_completed.id_for_label }}" class="form-label fw-bold">Date Completed</label>
+                        {{ form.date_completed }}
+                    </div>
+                </div>
+
+                <div class="d-grid gap-2 mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg rounded-pill">
+                        <i class="bi bi-save me-2"></i>Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

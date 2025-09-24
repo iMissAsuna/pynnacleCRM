@@ -1,0 +1,36 @@
+{% load static %}
+
+<li class="list-group-item d-flex justify-content-between align-items-center py-2 ps-4">
+    <div class="d-flex align-items-center">
+        {% with document.file.name|lower as filename %}
+            {% if filename|slice:"-4:" == ".pdf" %}
+                <i class="bi bi-file-earmark-pdf-fill me-2 text-danger"></i>
+            {% elif filename|slice:"-4:" == ".doc" or filename|slice:"-5:" == ".docx" %}
+                <i class="bi bi-file-earmark-word-fill me-2 text-primary"></i>
+            {% elif filename|slice:"-4:" == ".xls" or filename|slice:"-5:" == ".xlsx" %}
+                <i class="bi bi-file-earmark-excel-fill me-2 text-success"></i>
+            {% elif filename|slice:"-4:" == ".ppt" or filename|slice:"-5:" == ".pptx" %}
+                <i class="bi bi-file-earmark-ppt-fill me-2 text-warning"></i>
+            {% elif filename|slice:"-4:" == ".jpg" or filename|slice:"-5:" == ".jpeg" or filename|slice:"-4:" == ".png" or filename|slice:"-4:" == ".gif" %}
+                <i class="bi bi-image-fill me-2 text-muted"></i>
+            {% else %}
+                <i class="bi bi-file-earmark-fill me-2 text-secondary"></i>
+            {% endif %}
+        {% endwith %}
+        <a href="{{ document.file.url }}" target="_blank" class="text-decoration-none text-dark">{{ document.file.name }}</a>
+    </div>
+    <div class="btn-group btn-group-sm" role="group">
+        <a href="{{ document.file.url }}" target="_blank" class="btn btn-outline-info">
+            <i class="bi bi-eye"></i> View
+        </a>
+        <a href="{{ document.file.url }}" download class="btn btn-outline-secondary">
+            <i class="bi bi-download"></i> Download
+        </a>
+        <form action="{% url 'delete_document' document.pk %}" method="post" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-danger" onclick="return confirm('Are you sure you want to delete this file?');">
+                <i class="bi bi-trash"></i>
+            </button>
+        </form>
+    </div>
+</li>

@@ -1,0 +1,39 @@
+{% load static %}
+
+<li class="list-group-item list-group-item-action py-2">
+    <div class="d-flex justify-content-between align-items-center">
+        <a href="#" class="d-flex align-items-center text-decoration-none text-dark folder-toggle-btn" data-bs-toggle="collapse" data-bs-target="#collapse-{{ folder.pk }}" aria-expanded="false" aria-controls="collapse-{{ folder.pk }}">
+            <i class="bi bi-caret-right-fill folder-icon me-2"></i>
+            <i class="bi bi-folder-fill me-2 text-warning"></i>
+            <span class="fw-bold">{{ folder.name }}</span>
+            <span class="badge rounded-pill bg-info text-dark ms-2">{{ folder.get_document_count }} files, {{ folder.subfolders.count }} folders</span>
+        </a>
+        <div class="btn-group btn-group-sm" role="group">
+            <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#addFolderModal" data-parent-folder="{{ folder.pk }}">
+                <i class="bi bi-folder-plus"></i> Add Folder
+            </button>
+            <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#uploadFileModal" data-folder-id="{{ folder.pk }}">
+                <i class="bi bi-plus-lg"></i> Add File
+            </button>
+            <form action="{% url 'delete_folder' folder.pk %}" method="post" class="d-inline">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-danger" onclick="return confirm('Are you sure you want to delete this folder and all its contents? This action cannot be undone.');">
+                    <i class="bi bi-trash"></i> Delete Folder
+                </button>
+            </form>
+        </div>
+    </div>
+    <div class="collapse mt-2" id="collapse-{{ folder.pk }}">
+        <ul class="list-group list-group-flush border-start border-2 ms-3">
+            {% for subfolder in folder.subfolders.all %}
+                {% include 'partials/_folder_item.html' with folder=subfolder %}
+            {% endfor %}
+            {% for document in folder.documents.all %}
+                {% include 'partials/_document_item.html' with document=document %}
+            {% endfor %}
+            {% if not folder.subfolders.all and not folder.documents.all %}
+                <li class="list-group-item ps-4 text-muted">No subfolders or documents here.</li>
+            {% endif %}
+        </ul>
+    </div>
+</li>

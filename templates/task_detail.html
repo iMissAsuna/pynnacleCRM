@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0">Task Details: {{ task.job_id }}</h1>
+        <div>
+            <a href="{% url 'edit_task' task.pk %}" class="btn btn-info">
+                <i class="bi bi-pencil me-2"></i>Edit Task
+            </a>
+            <a href="{% url 'tasks_list' %}" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-2"></i>Back to List
+            </a>
+        </div>
+    </div>
+    <hr>
+    
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-light">
+            <h5 class="mb-0">Task Information</h5>
+        </div>
+        <div class="card-body">
+            <dl class="row mb-0">
+                <dt class="col-sm-3">Job ID:</dt>
+                <dd class="col-sm-9">{{ task.job_id }}</dd>
+
+                <dt class="col-sm-3">Property:</dt>
+                <dd class="col-sm-9">{{ task.property.name }}</dd>
+
+                <dt class="col-sm-3">Tenant's Information:</dt>
+                <dd class="col-sm-9">
+                    {% if task.tenant %}
+                        {{ task.tenant.full_name }} ({{ task.tenant.email }})
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </dd>
+
+                <dt class="col-sm-3">Date Reported:</dt>
+                <dd class="col-sm-9">{{ task.date_issue_reported|date:"d M Y" }}</dd>
+
+                <dt class="col-sm-3">Description of Issue:</dt>
+                <dd class="col-sm-9">{{ task.description_of_issue }}</dd>
+
+                <dt class="col-sm-3">Job Allocated:</dt>
+                <dd class="col-sm-9">{{ task.job_allocated }}</dd>
+
+                <dt class="col-sm-3">Date Completed:</dt>
+                <dd class="col-sm-9">{% if task.date_completed %}{{ task.date_completed|date:"d M Y" }}{% else %}N/A{% endif %}</dd>
+            </dl>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-light">
+            <h5 class="mb-0">Task Images</h5>
+        </div>
+        <div class="card-body">
+            <ul class="nav nav-tabs" id="imageTabs" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="pre-inspection-tab" data-bs-toggle="tab" href="#pre-inspection" role="tab">Pre-Inspection</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="dominic-tab" data-bs-toggle="tab" href="#dominic" role="tab">Dominic</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="confirmation-tab" data-bs-toggle="tab" href="#confirmation" role="tab">Confirmation</a>
+                </li>
+            </ul>
+
+            <div class="tab-content mt-3">
+                <div class="tab-pane fade show active" id="pre-inspection" role="tabpanel">
+                    {% include 'partials/_image_gallery.html' with images=pre_inspection_images %}
+                </div>
+                <div class="tab-pane fade" id="dominic" role="tabpanel">
+                    {% include 'partials/_image_gallery.html' with images=dominic_images %}
+                </div>
+                <div class="tab-pane fade" id="confirmation" role="tabpanel">
+                    {% include 'partials/_image_gallery.html' with images=confirmation_images %}
+                </div>
+            </div>
+
+            <hr>
+
+            <form method="post" enctype="multipart/form-data" class="mt-4">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="id_image" class="form-label">Upload Image</label>
+                        {{ image_form.image }}
+                    </div>
+                    <div class="col-md-4">
+                        <label for="id_image_type" class="form-label">Image Type</label>
+                        {{ image_form.image_type }}
+                    </div>
+                    <div class="col-md-2 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary w-100">Upload</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Ensure the form fields are styled correctly with Bootstrap classes
+    document.addEventListener('DOMContentLoaded', function() {
+        const imageField = document.getElementById('id_image');
+        if (imageField) {
+            imageField.classList.add('form-control');
+        }
+        const imageTypeField = document.getElementById('id_image_type');
+        if (imageTypeField) {
+            imageTypeField.classList.add('form-select');
+        }
+    });
+</script>
+{% endblock %}
