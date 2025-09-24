@@ -82,12 +82,10 @@ WSGI_APPLICATION = 'dcrm.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
+# Use the DATABASE_URL environment variable provided by Railway
 DATABASES = {
-    'default': dj_database_url.config(default='postgres://user:password@localhost:5432/db')
+    'default': dj_database_url.config(conn_max_age=600, ssl_require=True)
 }
-if 'DATABASE_URL' in os.environ:
-    DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
 
 
 # Password validation
