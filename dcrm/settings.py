@@ -61,12 +61,15 @@ TEMPLATES = [
 WSGI_APPLICATION = "dcrm.wsgi.application"
 
 # Database configuration
+# 
+# The `DATABASE_URL` environment variable is set by Railway on deployment.
+# For local development, we provide a fallback URL.
 DATABASES = {
     'default': dj_database_url.config(
-        default=os.environ.get('DATABASE_URL'),
+        default='sqlite:///db.sqlite3',  # The new fallback for local development
         conn_max_age=600,
         ssl_require=True,
-        engine='django.db.backends.postgresql_psycopg2'  # Explicit ENGINE for local compatibility
+        engine='django.db.backends.postgresql_psycopg2'
     )
 }
 
@@ -121,3 +124,4 @@ AWS_STORAGE_BUCKET_NAME = 'pynnacle'
 AWS_S3_ACCESS_KEY_ID = os.environ.get('B2_KEY_ID')
 AWS_S3_SECRET_ACCESS_KEY = os.environ.get('B2_APPLICATION_KEY')
 AWS_S3_FILE_OVERWRITE = False
+
