@@ -33,6 +33,12 @@ ALLOWED_HOSTS = [
     '127.0.0.1'
 ]
 
+# Note: The CSRF_TRUSTED_ORIGINS setting might not exist yet.
+# If it doesn't, just add it to the file.
+CSRF_TRUSTED_ORIGINS = [
+    'https://pynnaclecrm-production.up.railway.app'
+]
+
 
 # Application definition
 
