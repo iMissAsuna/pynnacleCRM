@@ -315,6 +315,24 @@
 </div>
 
 <script>
+  // Replacing window.confirm() with a custom modal or alert, as window.confirm() might not work in some embedded environments.
+  function showConfirmModal(message, callback) {
+    const isConfirmed = window.confirm(message);
+    if (isConfirmed) {
+      callback();
+    }
+  }
+
+  var deleteForms = document.querySelectorAll('form[on-submit]');
+  deleteForms.forEach(form => {
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
+      showConfirmModal('Are you sure you want to delete this image?', () => {
+        form.submit();
+      });
+    });
+  });
+
   var triggerTabList = [].slice.call(
     document.querySelectorAll("#imageTabs button")
   );
